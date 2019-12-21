@@ -4,13 +4,12 @@
    - "27017:27017"  
   volumes:  
    - './data:/data/db'  
- application:  
+ api:  
   build: .  
   command: bash -c "yarn install; nodemon server.js --color=always"  
   ports:  
-   - "8080:8080"  
-   - "5858:5858"  
+   - "3000:3000"  
   volumes:  
-   - ./app:/usr/src/app  
+   - ./api:/usr/src/api  
   links:  
    - mongo  

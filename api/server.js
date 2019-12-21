@@ -7,11 +7,7 @@ const authRoutes = require('./routes/auth');
 
 const mongoose = require('mongoose');
 
-//localhost:27017 - Endereco do servidor de banco de dados (localhost)
-// sauffs2019 - Nome do banco de dados criado
-
-
-const  mongo_connection  =  'mongodb+srv://xsolartech:xsolartech@cluster0-oqx4p.mongodb.net/test?retryWrites=true&w=majority'
+const  mongo_connection  =  'mongodb://mongo:27017'
 const option = {
      useNewUrlParser: true,
      useUnifiedTopology: true,
