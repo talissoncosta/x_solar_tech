@@ -19,6 +19,7 @@ export default function ModalEditar({id, show, handleClose}) {
     const [numeroCliente, setNumeroCliente] = useState('');
     const [complementoCliente, setComplementoCliente] = useState('');
     const [tipoCliente, setTipoCliente] = useState('');
+    const [enderecoPrincipal, setEnderecoPrincipal] = useState(false);
 
 
     const [token,setToken] = useState(localStorage.getItem('token'))
@@ -64,7 +65,9 @@ export default function ModalEditar({id, show, handleClose}) {
     async function tipo(event) {
         setTipoCliente(event.target.value)
     }
-
+    async function principal(event) {
+        setEnderecoPrincipal(event.target.checked)
+    }
     async function salvarDados() {
 
         let cliente = {
@@ -82,7 +85,7 @@ export default function ModalEditar({id, show, handleClose}) {
                     numero: numeroCliente,
                     complemento: complementoCliente,
                     tipo: tipoCliente,
-                    principal: true
+                    principal: enderecoPrincipal
                 }
             ]
         }
@@ -103,7 +106,7 @@ export default function ModalEditar({id, show, handleClose}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group   onSubmit={salvarDados}>
+                        <Form.Group >
                             <Form.Label>Nome</Form.Label>
                             <Form.Control onChange={nome} type="text" placeholder="Nome cliente" />
 
@@ -116,7 +119,7 @@ export default function ModalEditar({id, show, handleClose}) {
                             <Form.Label>Email</Form.Label>
                             <Form.Control onChange={email} type="email" placeholder="Email" />
                         </Form.Group>
-                        <Form.Label>Endereço principal</Form.Label>
+                        <Form.Label>Endereços</Form.Label>
 
                         <Form.Group>
                             <Container>
@@ -150,7 +153,7 @@ export default function ModalEditar({id, show, handleClose}) {
                                     </Col> 
                                 </Row>
                                 <Row>                              
-                                    <Col sm={8}>
+                                    <Col sm={6}>
                                         <Form.Label>Complemento</Form.Label>
                                         <Form.Control onChange={complemento} type='text' placeholder="Complemento" name='complemento' />
                                     </Col>
@@ -164,6 +167,13 @@ export default function ModalEditar({id, show, handleClose}) {
                                             <option value="casa de praia">Casa de praia</option>
                                         </Form.Control>
                                     </Col>
+
+                                </Row>
+                                <Row>                              
+                                    <Col sm style={styles.check}>
+                                        <Form.Check onChange={principal} type="checkbox"  label="Endereco principal"/>
+                                    </Col>
+
                                 </Row>
                             </Container>
                         </Form.Group>
@@ -183,4 +193,9 @@ export default function ModalEditar({id, show, handleClose}) {
       </>
 
     );
+}
+const styles = {
+    check:{
+        marginTop:"10px"
+    }
 }
