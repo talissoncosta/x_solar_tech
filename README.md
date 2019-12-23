@@ -1,7 +1,7 @@
 ## CRUD X Solar Tech
 
-Usuario: João 
-Função: gerente de vendas
++ Usuario: João 
++ Função: gerente de vendas
 
 #### Objetivo: CADASTRAR, VISUALIZAR, EDITAR E EXCLUIR clientes.
 
