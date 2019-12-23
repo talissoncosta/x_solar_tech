@@ -3,53 +3,15 @@ import React, { useEffect,useState } from 'react';
 import api from '../../services/api';
 import { Button,Table,Container,Col,Row,Modal,Accordion,Card  } from 'react-bootstrap';
 import { Edit, Delete,Add,Visibility } from '@material-ui/icons';
+import ModalGerenciaEndereco from '../ModalGerenciaEndereco'
 
 
 export default function ModalEnderecos({end, show, handleClose}) {
         const [enderecos, setEnderecos] = useState([]);
-
-    // function renderCliente(cliente, index) {
-    //     return (
-    //       <tr key={index}>
-    //         <td></td>
-    //         <td>{cliente.nome}</td>
-    //         <td>{cliente.cpf}</td>
-    //         <td>{cliente.telefone}</td>
-    //         <td>{cliente.email}</td>
-    //         <td>
-    //             <Visibility title="Gerenciar endereços"  onClick={() => editar(cliente._id)} color="primary" />
-
-    //             {/* <Container style={style.endereco}>
-    //                 <Row>
-    //                     <Col xs={6}><b>Cidade:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].cidade:'')} </Col>
-    //                     <Col xs={6}><b>Estado: </b>{(cliente.enderecos.length > 0? cliente.enderecos[0].estado:'')} </Col>
-    //                 </Row>
-    //                 <Row>
-    //                     <Col xs={6}><b>Bairro:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].bairro:'')} </Col>
-    //                     <Col xs={6}><b>CEP:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].cep:'')}</Col>
-    //                 </Row>
-    //                 <Row>
-    //                     <Col xs={6}><b>Rua:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].rua:'')}</Col>
-    //                     <Col xs={6}><b>Número:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].numero:'')}</Col>
-    //                 </Row>
-    //                 <Row>
-    //                     <Col xs={6}><b>Complemento:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].complemento:'')} </Col>
-    //                     <Col xs={6}><b>Tipo:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].tipo:'')} </Col>
-    //                 </Row>
-    //             </Container> */}
-            
-    //         </td>
-
-    //         <td>
-
-    //         <Edit title="Editar cliente"  onClick={() => editar(cliente._id)} color="primary" />
-    //         <Delete title="Remover cliente" onClick={() => remover(cliente._id)} color="secondary" />
-
-    //         </td>
-
-    //       </tr>
-    //     )
-    // }
+        const [modalGerenciaEnderecos, setModalGerenciaEnderecos] = useState([]);
+    const handleCloseModalGerenciaEnderecos = () => {
+        setModalGerenciaEnderecos(false);
+    }
     useEffect(() => {
         setEnderecos(end)
         console.log("enderecos",end)
@@ -67,25 +29,15 @@ export default function ModalEnderecos({end, show, handleClose}) {
         return (
             <Card>
                 <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                <Container>
-                    <Row>
-                        <Col >{endereco.rua}</Col>
-                        <Col >
-                            <Edit title="Editar cliente"  onClick={() => editar(endereco)} color="primary" />
-                        </Col>
-                        <Col >
-                            <Delete title="Remover cliente" onClick={() => remover(endereco)} color="secondary" />
-                        </Col>
-                    </Row>
-
-                </Container>
-                    
-
-                </Accordion.Toggle>
+                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                        {endereco.rua}
+                    </Accordion.Toggle>
+                    <Edit title="Editar cliente"  onClick={() => editar(endereco)} color="primary" />
+                    <Delete title="Remover cliente" onClick={() => remover(endereco)} color="secondary" />
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                 <Card.Body>
+
                     <Container style={style.endereco}>
                         <Row>
                             <Col xs={6}><b>Cidade:</b>{endereco.cidade} </Col>
@@ -113,15 +65,21 @@ export default function ModalEnderecos({end, show, handleClose}) {
     }
     return (
         <div >
+        <ModalEnderecos
+            show={modalGerenciaEnderecos}
+            handleClose={handleCloseModalGerenciaEnderecos}
 
-            <Modal size="lg" show={show} onHide={handleClose}>
+        />
+        <Modal size="lg" show={show} onHide={handleClose}>
             <Modal.Header closeButton>
             <Modal.Title>Endereços do cliente</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-
+                <Button style={style.btnAdd} variant="primary" >
+                    <Add color="primary" /> Cadastrar novo endereço
+                </Button>
                 <Accordion defaultActiveKey="0">
-
+           
                     {
                         enderecos.map(renderEnderecos)
                     }
