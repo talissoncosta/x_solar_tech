@@ -18,7 +18,7 @@ export default function Header() {
                 <Col sm={8}>            
                     <Image style={style} src="solar-tech.png"  fluid/>
                 </Col>
-                <Col style={styleNome} sm={2}>Olá João</Col>
+                <Col style={styleNome} sm={2}>Olá João!</Col>
                 <Col style={styleNome} sm={2} onClick={logout}><ExitToAppIcon />Logout</Col>
 
             </Row>

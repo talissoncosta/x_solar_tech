@@ -61,7 +61,9 @@ var buscar_id = async (req, res) => {
                 error: "Invalid data"
             });  
         const data = await Cliente.findById(id);
-    
+        if(data.length > 0)
+            data = data[0];
+            
         return res.json(data);      
     } catch (error) {
         console.log(error);

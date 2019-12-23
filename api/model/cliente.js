@@ -15,6 +15,7 @@ const ClienteSchema = new mongoose.Schema(
     email: String,
     enderecos: [
       {
+        cep: String,
         cidade: String,
         estado: String,
         bairro: String,        

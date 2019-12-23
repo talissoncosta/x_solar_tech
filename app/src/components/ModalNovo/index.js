@@ -86,6 +86,7 @@ export default function ModalEditar({id, show, handleClose}) {
                 }
             ]
         }
+        console.log(cliente)
 
         var response = await api.post(`/clientes`,cliente,{
             headers: { Authorization: token }
@@ -102,7 +103,7 @@ export default function ModalEditar({id, show, handleClose}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group controlId="formCliente"  onSubmit={salvarDados}>
+                        <Form.Group   onSubmit={salvarDados}>
                             <Form.Label>Nome</Form.Label>
                             <Form.Control onChange={nome} type="text" placeholder="Nome cliente" />
 
@@ -110,7 +111,7 @@ export default function ModalEditar({id, show, handleClose}) {
                             <MaskedFormControl onChange={cpf} type='text' name='cpf' placeholder="xxx.xxx.xxx-xx" mask='111.111.111-11' />
 
                             <Form.Label>Telefone</Form.Label>
-                            <MaskedFormControl onChange={telefone} type='text' placeholder="(xx) xxxxx-xxxx" name='phoneNumber' mask='(11) 11111-1111' />
+                            <MaskedFormControl onChange={telefone} type='text' placeholder="(xx) xxxxx-xxxx" name='telefone' mask='(11) 11111-1111' />
 
                             <Form.Label>Email</Form.Label>
                             <Form.Control onChange={email} type="email" placeholder="Email" />
@@ -151,11 +152,12 @@ export default function ModalEditar({id, show, handleClose}) {
                                 <Row>                              
                                     <Col sm={8}>
                                         <Form.Label>Complemento</Form.Label>
-                                        <Form.Control onChange={complemento} type='text' placeholder="Complemento" name='phoneNumber' />
+                                        <Form.Control onChange={complemento} type='text' placeholder="Complemento" name='complemento' />
                                     </Col>
                                     <Col sm={4}>
                                         <Form.Label>Tipo</Form.Label>
                                         <Form.Control onChange={tipo} as="select">
+                                            <option value="">Selecione</option>
                                             <option value="comercial">Comercial</option>
                                             <option value="residencial">Residencial</option>
                                             <option value="rural">Rural</option>

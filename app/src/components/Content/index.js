@@ -1,7 +1,7 @@
 
 import React, { useEffect,useState } from 'react';
 import api from '../../services/api';
-import { Button,Table } from 'react-bootstrap';
+import { Button,Table,Container,Col,Row  } from 'react-bootstrap';
 import { Edit, Delete,Add } from '@material-ui/icons';
 import ModalDelete from '../ModalDelete'
 import ModalEditar from '../ModalEditar'
@@ -35,7 +35,8 @@ export default function Content() {
         var response = await api.get(`/clientes`,{
             headers: { Authorization: token }
         })
-        await setClientes(response.data);
+        console.log(response.data)
+        setClientes(response.data);
     }
 
     function editar(id) { 
@@ -57,11 +58,32 @@ export default function Content() {
             <td>{cliente.cpf}</td>
             <td>{cliente.telefone}</td>
             <td>{cliente.email}</td>
+            <td>
+                <Container style={style.endereco}>
+                    <Row>
+                        <Col xs={6}><b>Cidade:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].cidade:'')} </Col>
+                        <Col xs={6}><b>Estado: </b>{(cliente.enderecos.length > 0? cliente.enderecos[0].estado:'')} </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={6}><b>Bairro:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].bairro:'')} </Col>
+                        <Col xs={6}><b>CEP:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].cep:'')}</Col>
+                    </Row>
+                    <Row>
+                        <Col xs={6}><b>Rua:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].rua:'')}</Col>
+                        <Col xs={6}><b>Número:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].numero:'')}</Col>
+                    </Row>
+                    <Row>
+                        <Col xs={6}><b>Complemento:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].complemento:'')} </Col>
+                        <Col xs={6}><b>Tipo:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].tipo:'')} </Col>
+                    </Row>
+                </Container>
+            
+            </td>
 
             <td>
 
-            <Edit  onClick={() => editar(cliente._id)} color="primary" />
-            <Delete onClick={() => remover(cliente._id)} color="secondary" />
+            <Edit title="Editar cliente"  onClick={() => editar(cliente._id)} color="primary" />
+            <Delete title="Remover cliente" onClick={() => remover(cliente._id)} color="secondary" />
 
             </td>
 
@@ -73,7 +95,7 @@ export default function Content() {
     }, []);
     return (
         <div>
-            <Button variant="primary" onClick={handleShow}>
+            <Button style={style.btnAdd} variant="primary" onClick={handleShow}>
                 <Add color="primary" /> Cadastrar novo cliente
             </Button>
             <ModalDelete
@@ -90,23 +112,37 @@ export default function Content() {
                 show={showModalNovo}
                 handleClose={handleCloseModalNovo}
             />
-            <Table striped condensed hover>
-                <thead>
-                    <tr>
-                    <th></th>
-                    <th>Nome</th>
-                    <th>Cpf</th>
-                    <th>Telefone</th>
-                    <th>Email</th>
-                    <th>Acões</th>
+            <Table style={style.table} striped condensed hover>
+                    <thead>
+                        <tr>
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Cpf</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Endereço principal</th>
+                        <th>Acões</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {clientes.map(renderCliente)}
-                </tbody>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {clientes.map(renderCliente)}
+                    </tbody>
                 </Table>
 
         </div>
     );
+}
+
+const style = {
+
+    btnAdd:{
+        marginBottom:'20px'
+    },
+    table:{
+        textAlign:'center'
+    },
+    endereco:{
+        textAlign:'left'
+    }
 }

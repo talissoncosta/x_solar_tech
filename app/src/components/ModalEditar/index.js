@@ -21,6 +21,7 @@ export default function ModalEditar({id, show, handleClose}) {
     const [numeroCliente, setNumeroCliente] = useState('');
     const [complementoCliente, setComplementoCliente] = useState('');
     const [tipoCliente, setTipoCliente] = useState('');
+    const [enderecoPrincipalCliente, setEnderecoPrincipalCliente] = useState([]);
     async function nome(event) {
         setNomeCliente(event.target.value)
     }
@@ -58,13 +59,27 @@ export default function ModalEditar({id, show, handleClose}) {
         setTipoCliente(event.target.value)
     }
     async function buscarDadosCliente(id) {
-        var response = await api.get(`/clientes/${id}`)
+        var response = await api.get(`/clientes/${id}`, {
+            headers: {
+                Authorization: token
+            }
+        })
         let cl = response.data;
         setCliente(cl);
         setNomeCliente(cl.nome);
         setCpfCliente(cl.cpf);
         setEmailCliente(cl.email);
         setTelefoneCliente(cl.telefone);
+        let end = (cl.enderecos ? cl.enderecos[0] : {});
+        setCepCliente(end.cep);
+        setEstadoCliente(end.estado);
+        setCidadeCliente(end.cidade);
+        setBairroCliente(end.bairro);
+        setRuaCliente(end.rua);
+        setNumeroCliente(end.numero);
+        setComplementoCliente(end.complemento);
+        setTipoCliente(end.tipo);
+
 
     }
     async function atualizarDados() {
@@ -73,10 +88,22 @@ export default function ModalEditar({id, show, handleClose}) {
             "nome":nomeCliente,
             "cpf":cpfCliente,
             "telefone": telefoneCliente,
-            "email": emailCliente
+            "email": emailCliente,
+            "enderecos":[
+                {
+                    cep:cepCliente,
+                    cidade: cidadeCliente,
+                    estado: estadoCliente,
+                    bairro: bairroCliente,        
+                    rua: ruaCliente,
+                    numero: numeroCliente,
+                    complemento: complementoCliente,
+                    tipo: tipoCliente,
+                    principal: true
+                }
+            ]
         }
-
-        var response = await api.put(`/clientes/${cliente._id}`,data,{
+        await api.put(`/clientes/${cliente._id}`,data,{
             headers: { Authorization: token }
         })
         handleClose();
@@ -93,7 +120,7 @@ export default function ModalEditar({id, show, handleClose}) {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group controlId="formCliente"  >
+                    <Form.Group   >
                         <Form.Label>Nome</Form.Label>
                         <Form.Control onChange={nome} value={nomeCliente} type="text" placeholder="Nome cliente" />
 
@@ -101,7 +128,7 @@ export default function ModalEditar({id, show, handleClose}) {
                         <MaskedFormControl onChange={cpf} value={cpfCliente} type='text' name='cpf' placeholder="xxx.xxx.xxx-xx" mask='111.111.111-11' />
 
                         <Form.Label>Telefone</Form.Label>
-                        <MaskedFormControl onChange={telefone} value={telefoneCliente} type='text' placeholder="(xx) xxxxx-xxxx" name='phoneNumber' mask='(11) 11111-1111' />
+                        <MaskedFormControl onChange={telefone} value={telefoneCliente} type='text' placeholder="(xx) xxxxx-xxxx" name='telefone' mask='(11) 11111-1111' />
                         
                         <Form.Label>Email</Form.Label>
                         <Form.Control onChange={email} value={emailCliente} type="email" placeholder="Email" />
@@ -113,40 +140,41 @@ export default function ModalEditar({id, show, handleClose}) {
                                 <Row>
                                     <Col sm={4}>
                                         <Form.Label>CEP</Form.Label>
-                                        <MaskedFormControl onChange={cep} type='text' name='cep' placeholder="xxxxx-xxx" mask='11111-111' />
+                                        <MaskedFormControl onChange={cep} value={cepCliente} type='text' name='cep' placeholder="xxxxx-xxx" mask='11111-111' />
                                     </Col>
                                     <Col sm={4}>
                                         <Form.Label>Estado</Form.Label>
-                                        <Form.Control onChange={estado} type='text' name='estado' placeholder="Estado"  />
+                                        <Form.Control onChange={estado} value={estadoCliente} type='text' name='estado' placeholder="Estado"  />
                                     </Col>
                                     <Col sm={4}>
                                         <Form.Label>Cidade</Form.Label>
-                                        <Form.Control onChange={cidade} type='text' placeholder="Cidade" name='cidade' />
+                                        <Form.Control onChange={cidade} value={cidadeCliente} type='text' placeholder="Cidade" name='cidade' />
                                     </Col>
                                 </Row>
                                 <Row>
 
                                     <Col sm={4}>
                                         <Form.Label>Bairro</Form.Label>
-                                        <Form.Control onChange={bairro} type='text' placeholder="Bairro" name='bairro' />
+                                        <Form.Control onChange={bairro} value={bairroCliente} type='text' placeholder="Bairro" name='bairro' />
                                     </Col>    
                                     <Col sm={4}>
                                         <Form.Label>Rua</Form.Label>
-                                        <Form.Control onChange={rua} type='text' placeholder="Rua" name='rua' />
+                                        <Form.Control onChange={rua} value={ruaCliente} type='text' placeholder="Rua" name='rua' />
                                     </Col>                                    
                                     <Col sm={4}>
                                         <Form.Label>Número</Form.Label>
-                                        <Form.Control onChange={numero} type='number' placeholder="Numero" name='numero' />
+                                        <Form.Control onChange={numero} value={numeroCliente} type='number' placeholder="Numero" name='numero' />
                                     </Col> 
                                 </Row>
                                 <Row>                              
                                     <Col sm={8}>
                                         <Form.Label>Complemento</Form.Label>
-                                        <Form.Control onChange={complemento} type='text' placeholder="Complemento" name='phoneNumber' />
+                                        <Form.Control onChange={complemento} value={complementoCliente} type='text' placeholder="Complemento" name='complemento' />
                                     </Col>
                                     <Col sm={4}>
                                         <Form.Label>Tipo</Form.Label>
-                                        <Form.Control onChange={tipo} as="select">
+                                        <Form.Control onChange={tipo} value={tipoCliente} as="select">
+                                            <option value="">Selecione</option>
                                             <option value="comercial">Comercial</option>
                                             <option value="residencial">Residencial</option>
                                             <option value="rural">Rural</option>

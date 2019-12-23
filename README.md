@@ -23,27 +23,9 @@ Cliente:
 
 OBS: João gostaria de ser notificado por e-mail a cada novo cliente cadastrado
 
+Para rodar projeto execute o comando  ```docker-compose up``` na raiz do projeto para montar os containers.
 
-## BACK-END
-
-- NODEJS
-    - EXPRESS
-    - JWT
-- MONGODB
-    - CLIENTES
-    - USUARIOS
-
-Para rodar projeto
-Executar o comando 
-```docker-compose up```
-na raiz do projeto para montar os containers
-
-Então...
-```cd app && yarn start```
-
-para rodar a aplicação
-
-para acessar a aplicação basta acessar o endereço:
+Então utilize o seguinte comando no terminal ```cd app && yarn install && yarn start``` para rodar a aplicação. E para acessar a aplicação basta acessar o endereço:
 
 http://localhost:3000
 
@@ -54,7 +36,7 @@ Para realizar o login utilize:
 usuario: joao
 senha: xsolartech
 
-O cadastro de multiplos endereços ficou pendente.
+O cadastro de multiplos endereços secundários ficou pendente.
 
 Qualquer dúvida estou a disposição.
 
