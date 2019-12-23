@@ -7,6 +7,6 @@
  COPY api/package.json /usr/src/api/package.json  
  RUN yarn install 
    
- EXPOSE 3000
+ EXPOSE 3001
    
- CMD ["yarn", "start"]  
+ CMD ["yarn", "start"]

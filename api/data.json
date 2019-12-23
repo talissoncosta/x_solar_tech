@@ -1,0 +1,30 @@
+  [ {
+    "nome": "Bran Stark",
+    "cpf": "322.974.432-32",
+    "telefone": "4999921291" ,
+    "email": "bran@stark.com",
+    "enderecos": [
+      {
+        "cidade": "Winterfell",
+        "estado": "North",
+        "bairro": "Winterfell" ,        
+        "rua": "Royal road",
+        "numero": "432",
+        "complemento": "Castle",
+        "tipo":"residencial",
+        "principal": "true"
+      },
+      {
+        "cidade": "Winterfell",
+        "estado": "North",
+        "bairro": "Winterfell" ,        
+        "rua": "Royal road",
+        "numero": "432",
+        "complemento": "Castle",
+        "tipo":"residencial",
+        "principal": "true"
+      }
+    ]
+  }
+
+]

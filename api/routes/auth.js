@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const authController = require('../controller/auth')
+const clientesController = require('../controller/clientes')
 
-router.get('/getauth', authController.gerar_jwt);
+router.post('/login',clientesController.login_usuario);
 
 module.exports = router;

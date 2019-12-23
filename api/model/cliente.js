@@ -19,7 +19,7 @@ const ClienteSchema = new mongoose.Schema(
         estado: String,
         bairro: String,        
         rua: String,
-        numero: Number,
+        numero: String,
         complemento: String,
         tipo: ["comercial","residencial","rural", "casa de praia"],
         principal: Boolean

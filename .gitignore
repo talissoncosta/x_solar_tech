@@ -3,3 +3,5 @@ app/yarn.lock
 api/node_modules/
 
 api/yarn.lock
+
+api/yarn-error.log
