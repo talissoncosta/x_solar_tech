@@ -1,8 +1,8 @@
 
 import React, { useEffect,useState } from 'react';
 import api from '../../services/api';
-import { Button,Table,Container,Col,Row,Modal,Accordion,Card  } from 'react-bootstrap';
-import { Edit, Delete,Add,Visibility } from '@material-ui/icons';
+import { Button,Container,Col,Row,Modal,Accordion,Card  } from 'react-bootstrap';
+import { Edit, Delete,Add } from '@material-ui/icons';
 import ModalGerenciaEndereco from '../ModalGerenciaEndereco'
 
 
@@ -10,6 +10,7 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
         const [enderecos, setEnderecos] = useState([]);
         const [endSelecionado, setEndSelecionado] = useState({});
         const [indexSelecionado, setIndexSelecionado] = useState(0);
+        const [showModalDelete, setShowModalDelete] = useState(false);
 
         const [idCliente, setIdCliente] = useState(id);
         const [token,setToken] = useState(localStorage.getItem('token'))
@@ -18,8 +19,10 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
     const handleCloseModalGerenciaEnderecos = () => {
         setModalGerenciaEnderecos(false);
     }
+    const handleCloseModalDelete = () => {
+        setShowModalDelete(false);
+    }
     useEffect(() => {
-        console.log("endereco aauii",end)
         setIdCliente(id)
         buscar(id);
 
@@ -30,15 +33,28 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
             headers: { Authorization: token }
         })
     }
-    async function buscar(){
-        let response = await api.get(`/clientes/enderecos/${id}`,{
-            headers: { Authorization: token }
-        })
-        setEnderecos(response.data)
+    async function buscar(id = false){
+        if(!id) 
+            id = idCliente;
+        if(id){
+            let response = await api.get(`/clientes/enderecos/${id}`,{
+                headers: { Authorization: token }
+            })
+            setEnderecos(response.data)
+        }
+    }
+    async function atualizaPrincipal(i = false){
 
+        let a = enderecos.map((end,index) => {
+            if(i >= 0 && index == i) 
+                end.principal = true;
+            else
+                end.principal = false;
+
+            return end;
+        })
     }
     async function editar(end,index) {
-        console.log("editar")
         setEndSelecionado(end)
         setIndexSelecionado(index)
         setModalGerenciaEnderecos(true)
@@ -52,11 +68,18 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
         setEndSelecionado({})
         setModalGerenciaEnderecos(true);
     } 
-
+    const confirmaExclusao = (index) =>{
+        setIndexSelecionado(index)
+        setShowModalDelete(true);
+    } 
     function remover(index) {
         enderecos.splice(index, 1);
         atualizar(enderecos);
         buscar();
+    }
+    function removerEndereco(){
+        remover(indexSelecionado)
+        handleCloseModalDelete()
     }
 
 
@@ -68,7 +91,7 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
                         {endereco.rua}
                     </Accordion.Toggle>
                     <Edit title="Editar cliente"  onClick={() => editar(endereco,index)} color="primary" />
-                    <Delete title="Remover cliente" onClick={() => remover(index)} color="secondary" />
+                    <Delete title="Remover cliente" onClick={() => confirmaExclusao(index)} color="secondary" />
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                 <Card.Body>
@@ -90,6 +113,9 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
                             <Col xs={6}><b>Complemento:</b>{endereco.complemento} </Col>
                             <Col xs={6}><b>Tipo:</b>{endereco.tipo} </Col>
                         </Row>
+                        <Row>
+                            <Col xs={6}><b>Endereco principal:</b> {(endereco.principal?'Sim':'Não')} </Col>
+                        </Row>
                     </Container>
 
                 </Card.Body>
@@ -107,8 +133,25 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
             end={endSelecionado}
             updateEnderecos={updateEnderecos}
             atualizarEnderecos={buscar}
+            atualizaPrincipal={atualizaPrincipal}
+            index={indexSelecionado}
 
         />
+
+        <Modal show={showModalDelete} onHide={handleCloseModalDelete}>
+            <Modal.Header closeButton>
+            <Modal.Title>Remover endereço</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Você tem certeza que deseja remover este endereço?</Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModalDelete}>
+                Cancelar
+            </Button>
+            <Button variant="danger" onClick={removerEndereco}>
+                Confirmar
+            </Button>
+            </Modal.Footer>
+        </Modal>
         <Modal size="lg" show={show} onHide={handleClose}>
             <Modal.Header closeButton>
             <Modal.Title>Endereços do cliente</Modal.Title>

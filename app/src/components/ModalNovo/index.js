@@ -1,12 +1,11 @@
 
 import React, { useEffect,useState } from 'react';
 import api from '../../services/api';
-import { Button,Modal,Form,Table,Toast,Container,Col,Row } from 'react-bootstrap';
+import { Button,Modal,Form} from 'react-bootstrap';
 import MaskedFormControl from 'react-bootstrap-maskedinput'
 
 
 export default function ModalNovo({id, show, handleClose}) {
-    const [cliente,setCliente] = useState({});
     const [nomeCliente, setNomeCliente] = useState('');
     const [cpfCliente, setCpfCliente] = useState('');
     const [telefoneCliente, setTelefoneCliente] = useState('');
@@ -41,7 +40,6 @@ export default function ModalNovo({id, show, handleClose}) {
             "telefone": telefoneCliente,
             "email": emailCliente
         }
-        console.log(cliente)
 
         var response = await api.post(`/clientes`,cliente,{
             headers: { Authorization: token }

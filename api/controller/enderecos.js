@@ -18,12 +18,7 @@ var salvar_endereco =  async (req, res) => {
         const  endereco  = req.body;
 
         const data = await Cliente.findById(id);
-        console.log(req.body)
-        console.log(data,endereco)
         data.enderecos.push(endereco);
-
-
-        console.log("apospush",data)
 
         await Cliente.findByIdAndUpdate(id,data);
 
@@ -42,9 +37,6 @@ var atualizar_enderecos =  async (req, res) => {
 
         const data = await Cliente.findById(id);
         data.enderecos = enderecos;
-
-
-        console.log("apospush",data)
 
         await Cliente.findByIdAndUpdate(id,data);
 

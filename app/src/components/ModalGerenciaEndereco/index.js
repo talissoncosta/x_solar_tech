@@ -5,7 +5,7 @@ import { Button,Modal,Form,Container,Col,Row } from 'react-bootstrap';
 import MaskedFormControl from 'react-bootstrap-maskedinput'
 
 
-export default function ModalGerenciaEndereco({id, show, handleClose,end,updateEnderecos,atualizarEnderecos}) {
+export default function ModalGerenciaEndereco({id, show, handleClose,end,updateEnderecos,atualizarEnderecos,atualizaPrincipal,index}) {
     const [token,setToken] = useState(localStorage.getItem('token'))
 
     const [idCliente,setIdCliente] = useState(id);
@@ -18,7 +18,8 @@ export default function ModalGerenciaEndereco({id, show, handleClose,end,updateE
     const [numeroCliente, setNumeroCliente] = useState('');
     const [complementoCliente, setComplementoCliente] = useState('');
     const [tipoCliente, setTipoCliente] = useState('');
-    const [enderecoPrincipalCliente, setEnderecoPrincipalCliente] = useState([]);
+    const [endPrincipal, setEndPrincipal] = useState(false);
+    const [indexSelecionado, setIndexSelecionado] = useState(index);
 
     async function estado(event) {
         setEstadoCliente(event.target.value)
@@ -44,32 +45,42 @@ export default function ModalGerenciaEndereco({id, show, handleClose,end,updateE
     async function tipo(event) {
         setTipoCliente(event.target.value)
     }
+    async function principal(event) {
+        setEndPrincipal(event.target.checked)
+    }
 
     async function salvarEndereco() {
-            let data = {
-                cep:cepCliente,
-                cidade: cidadeCliente,
-                estado: estadoCliente,
-                bairro: bairroCliente,        
-                rua: ruaCliente,
-                numero: numeroCliente,
-                complemento: complementoCliente,
-                tipo: tipoCliente,
-                principal: true
-            }
+
+        let data = {
+            cep:cepCliente,
+            cidade: cidadeCliente,
+            estado: estadoCliente,
+            bairro: bairroCliente,        
+            rua: ruaCliente,
+            numero: numeroCliente,
+            complemento: complementoCliente,
+            tipo: tipoCliente,
+            principal: endPrincipal
+        }
         if(Object.keys(end).length !== 0 ){
+            atualizaPrincipal(indexSelecionado)
+
             updateEnderecos(data)
         }else{
+            atualizaPrincipal()
             await api.post(`/clientes/enderecos/${idCliente}`,data,{
                 headers: { Authorization: token }
             })
             atualizarEnderecos();
         }
 
-
         handleClose();
 
     }
+    useEffect(() => {
+
+        setIndexSelecionado(index)
+      }, [index]);
     useEffect(() => {
       if(end){
         setCepCliente(end.cep);
@@ -80,6 +91,8 @@ export default function ModalGerenciaEndereco({id, show, handleClose,end,updateE
         setNumeroCliente(end.numero);
         setComplementoCliente(end.complemento);
         setTipoCliente(end.tipo);
+        setEndPrincipal(end.principal);
+
       }else{
         setCepCliente('');
         setEstadoCliente('');
@@ -89,6 +102,8 @@ export default function ModalGerenciaEndereco({id, show, handleClose,end,updateE
         setNumeroCliente('');
         setComplementoCliente('');
         setTipoCliente('');
+        setEndPrincipal(false);
+
       }
       setIdCliente(id)
     }, [end]);
@@ -104,6 +119,12 @@ export default function ModalGerenciaEndereco({id, show, handleClose,end,updateE
 
                     <Form.Group>
                         <Container>
+                            <Row>                              
+                                <Col sm={8}>
+                                    <Form.Check onChange={principal} type="checkbox" checked={endPrincipal} label="Endereço principal" />
+                                </Col>
+
+                            </Row>
                             <Row>
                                 <Col sm={4}>
                                     <Form.Label>CEP</Form.Label>
@@ -149,6 +170,7 @@ export default function ModalGerenciaEndereco({id, show, handleClose,end,updateE
                                     </Form.Control>
                                 </Col>
                             </Row>
+
                         </Container>
                     </Form.Group>
                 </Form>
