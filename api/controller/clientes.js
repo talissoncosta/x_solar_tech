@@ -107,8 +107,7 @@ var atualizar = async (req, res) => {
                 nome: nome,
                 email: email,
                 cpf: cpf,
-                telefone: telefone,
-                enderecos: enderecos
+                telefone: telefone
             }
             
         }

@@ -55,9 +55,10 @@ export default function Content() {
         setIdSelecionado(id)
         console.log(modalConfirmDelete)
     }
-    function enderecos(enderecos) {
-        console.log("END",enderecos)
+    function enderecos(enderecos,id) {
+        console.log("END",enderecos,id)
         setShowModalEnderecos(true)
+        setIdSelecionado(id)
         setEnderecosCliente(enderecos);
     }
     function renderCliente(cliente, index) {
@@ -69,7 +70,7 @@ export default function Content() {
             <td>{cliente.telefone}</td>
             <td>{cliente.email}</td>
             <td>
-                <Visibility title="Gerenciar endereços"  onClick={() => enderecos(cliente.enderecos)} color="primary" />
+                <Visibility title="Gerenciar endereços"  onClick={() => enderecos(cliente.enderecos,cliente._id)} color="primary" />
             
             </td>
 
@@ -107,6 +108,7 @@ export default function Content() {
             />
             <ModalEnderecos
                 show={showModalEnderecos}
+                id={idSelecionado}
                 handleClose={handleCloseModalEnderecos}
                 end={enderecosCliente}
 

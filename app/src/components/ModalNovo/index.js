@@ -5,21 +5,12 @@ import { Button,Modal,Form,Table,Toast,Container,Col,Row } from 'react-bootstrap
 import MaskedFormControl from 'react-bootstrap-maskedinput'
 
 
-export default function ModalEditar({id, show, handleClose}) {
+export default function ModalNovo({id, show, handleClose}) {
     const [cliente,setCliente] = useState({});
     const [nomeCliente, setNomeCliente] = useState('');
     const [cpfCliente, setCpfCliente] = useState('');
     const [telefoneCliente, setTelefoneCliente] = useState('');
     const [emailCliente, setEmailCliente] = useState('');
-    const [cepCliente, setCepCliente] = useState('');
-    const [estadoCliente, setEstadoCliente] = useState('');
-    const [cidadeCliente, setCidadeCliente] = useState('');
-    const [bairroCliente, setBairroCliente] = useState('');
-    const [ruaCliente, setRuaCliente] = useState('');
-    const [numeroCliente, setNumeroCliente] = useState('');
-    const [complementoCliente, setComplementoCliente] = useState('');
-    const [tipoCliente, setTipoCliente] = useState('');
-    const [enderecoPrincipal, setEnderecoPrincipal] = useState(false);
 
 
     const [token,setToken] = useState(localStorage.getItem('token'))
@@ -41,53 +32,14 @@ export default function ModalEditar({id, show, handleClose}) {
     async function email(event) {
         setEmailCliente(event.target.value)
     }
-    async function estado(event) {
-        setEstadoCliente(event.target.value)
-    }
-    async function cidade(event) {
-        setCidadeCliente(event.target.value)
-    }
-    async function bairro(event) {
-        setBairroCliente(event.target.value)
-    }
-    async function cep(event) {
-        setCepCliente(event.target.value)
-    }
-    async function rua(event) {
-        setRuaCliente(event.target.value)
-    }
-    async function numero(event) {
-        setNumeroCliente(event.target.value)
-    }
-    async function complemento(event) {
-        setComplementoCliente(event.target.value)
-    }
-    async function tipo(event) {
-        setTipoCliente(event.target.value)
-    }
-    async function principal(event) {
-        setEnderecoPrincipal(event.target.checked)
-    }
+
     async function salvarDados() {
 
         let cliente = {
             "nome":nomeCliente,
             "cpf":cpfCliente,
             "telefone": telefoneCliente,
-            "email": emailCliente,
-            "enderecos":[
-                {
-                    cep:cepCliente,
-                    cidade: cidadeCliente,
-                    estado: estadoCliente,
-                    bairro: bairroCliente,        
-                    rua: ruaCliente,
-                    numero: numeroCliente,
-                    complemento: complementoCliente,
-                    tipo: tipoCliente,
-                    principal: enderecoPrincipal
-                }
-            ]
+            "email": emailCliente
         }
         console.log(cliente)
 
@@ -119,67 +71,9 @@ export default function ModalEditar({id, show, handleClose}) {
                             <Form.Label>Email</Form.Label>
                             <Form.Control onChange={email} type="email" placeholder="Email" />
                         </Form.Group>
-                        <Form.Label>Endereços</Form.Label>
 
-                        <Form.Group>
-                            <Container>
-                                <Row>
-                                    <Col sm={4}>
-                                        <Form.Label>CEP</Form.Label>
-                                        <MaskedFormControl onChange={cep} type='text' name='cep' placeholder="xxxxx-xxx" mask='11111-111' />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Form.Label>Estado</Form.Label>
-                                        <Form.Control onChange={estado} type='text' name='estado' placeholder="Estado"  />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Form.Label>Cidade</Form.Label>
-                                        <Form.Control onChange={cidade} type='text' placeholder="Cidade" name='cidade' />
-                                    </Col>
-                                </Row>
-                                <Row>
-
-                                    <Col sm={4}>
-                                        <Form.Label>Bairro</Form.Label>
-                                        <Form.Control onChange={bairro} type='text' placeholder="Bairro" name='bairro' />
-                                    </Col>    
-                                    <Col sm={4}>
-                                        <Form.Label>Rua</Form.Label>
-                                        <Form.Control onChange={rua} type='text' placeholder="Rua" name='rua' />
-                                    </Col>                                    
-                                    <Col sm={4}>
-                                        <Form.Label>Número</Form.Label>
-                                        <Form.Control onChange={numero} type='number' placeholder="Numero" name='numero' />
-                                    </Col> 
-                                </Row>
-                                <Row>                              
-                                    <Col sm={6}>
-                                        <Form.Label>Complemento</Form.Label>
-                                        <Form.Control onChange={complemento} type='text' placeholder="Complemento" name='complemento' />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Form.Label>Tipo</Form.Label>
-                                        <Form.Control onChange={tipo} as="select">
-                                            <option value="">Selecione</option>
-                                            <option value="comercial">Comercial</option>
-                                            <option value="residencial">Residencial</option>
-                                            <option value="rural">Rural</option>
-                                            <option value="casa de praia">Casa de praia</option>
-                                        </Form.Control>
-                                    </Col>
-
-                                </Row>
-                                <Row>                              
-                                    <Col sm style={styles.check}>
-                                        <Form.Check onChange={principal} type="checkbox"  label="Endereco principal"/>
-                                    </Col>
-
-                                </Row>
-                            </Container>
-                        </Form.Group>
                     </Form>
 
-{/* //        tipo: comercial, residencial, rural ou casa de praia */}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

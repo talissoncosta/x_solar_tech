@@ -13,15 +13,7 @@ export default function ModalEditar({id, show, handleClose}) {
     const [cpfCliente, setCpfCliente] = useState('');
     const [telefoneCliente, setTelefoneCliente] = useState('');
     const [emailCliente, setEmailCliente] = useState('');
-    const [cepCliente, setCepCliente] = useState('');
-    const [estadoCliente, setEstadoCliente] = useState('');
-    const [cidadeCliente, setCidadeCliente] = useState('');
-    const [bairroCliente, setBairroCliente] = useState('');
-    const [ruaCliente, setRuaCliente] = useState('');
-    const [numeroCliente, setNumeroCliente] = useState('');
-    const [complementoCliente, setComplementoCliente] = useState('');
-    const [tipoCliente, setTipoCliente] = useState('');
-    const [enderecoPrincipalCliente, setEnderecoPrincipalCliente] = useState([]);
+
     async function nome(event) {
         setNomeCliente(event.target.value)
     }
@@ -34,30 +26,7 @@ export default function ModalEditar({id, show, handleClose}) {
     async function email(event) {
         setEmailCliente(event.target.value)
     }
-    async function estado(event) {
-        setEstadoCliente(event.target.value)
-    }
-    async function cidade(event) {
-        setCidadeCliente(event.target.value)
-    }
-    async function bairro(event) {
-        setBairroCliente(event.target.value)
-    }
-    async function cep(event) {
-        setCepCliente(event.target.value)
-    }
-    async function rua(event) {
-        setRuaCliente(event.target.value)
-    }
-    async function numero(event) {
-        setNumeroCliente(event.target.value)
-    }
-    async function complemento(event) {
-        setComplementoCliente(event.target.value)
-    }
-    async function tipo(event) {
-        setTipoCliente(event.target.value)
-    }
+
     async function buscarDadosCliente(id) {
         var response = await api.get(`/clientes/${id}`, {
             headers: {
@@ -70,16 +39,6 @@ export default function ModalEditar({id, show, handleClose}) {
         setCpfCliente(cl.cpf);
         setEmailCliente(cl.email);
         setTelefoneCliente(cl.telefone);
-        let end = (cl.enderecos ? cl.enderecos[0] : {});
-        setCepCliente(end.cep);
-        setEstadoCliente(end.estado);
-        setCidadeCliente(end.cidade);
-        setBairroCliente(end.bairro);
-        setRuaCliente(end.rua);
-        setNumeroCliente(end.numero);
-        setComplementoCliente(end.complemento);
-        setTipoCliente(end.tipo);
-
 
     }
     async function atualizarDados() {
@@ -88,20 +47,7 @@ export default function ModalEditar({id, show, handleClose}) {
             "nome":nomeCliente,
             "cpf":cpfCliente,
             "telefone": telefoneCliente,
-            "email": emailCliente,
-            "enderecos":[
-                {
-                    cep:cepCliente,
-                    cidade: cidadeCliente,
-                    estado: estadoCliente,
-                    bairro: bairroCliente,        
-                    rua: ruaCliente,
-                    numero: numeroCliente,
-                    complemento: complementoCliente,
-                    tipo: tipoCliente,
-                    principal: true
-                }
-            ]
+            "email": emailCliente
         }
         await api.put(`/clientes/${cliente._id}`,data,{
             headers: { Authorization: token }
@@ -133,57 +79,7 @@ export default function ModalEditar({id, show, handleClose}) {
                         <Form.Label>Email</Form.Label>
                         <Form.Control onChange={email} value={emailCliente} type="email" placeholder="Email" />
                     </Form.Group>
-                    <Form.Label>Endereço principal</Form.Label>
 
-                    <Form.Group>
-                            <Container>
-                                <Row>
-                                    <Col sm={4}>
-                                        <Form.Label>CEP</Form.Label>
-                                        <MaskedFormControl onChange={cep} value={cepCliente} type='text' name='cep' placeholder="xxxxx-xxx" mask='11111-111' />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Form.Label>Estado</Form.Label>
-                                        <Form.Control onChange={estado} value={estadoCliente} type='text' name='estado' placeholder="Estado"  />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Form.Label>Cidade</Form.Label>
-                                        <Form.Control onChange={cidade} value={cidadeCliente} type='text' placeholder="Cidade" name='cidade' />
-                                    </Col>
-                                </Row>
-                                <Row>
-
-                                    <Col sm={4}>
-                                        <Form.Label>Bairro</Form.Label>
-                                        <Form.Control onChange={bairro} value={bairroCliente} type='text' placeholder="Bairro" name='bairro' />
-                                    </Col>    
-                                    <Col sm={4}>
-                                        <Form.Label>Rua</Form.Label>
-                                        <Form.Control onChange={rua} value={ruaCliente} type='text' placeholder="Rua" name='rua' />
-                                    </Col>                                    
-                                    <Col sm={4}>
-                                        <Form.Label>Número</Form.Label>
-                                        <Form.Control onChange={numero} value={numeroCliente} type='number' placeholder="Numero" name='numero' />
-                                    </Col> 
-                                </Row>
-                                <Row>                              
-                                    <Col sm={8}>
-                                        <Form.Label>Complemento</Form.Label>
-                                        <Form.Control onChange={complemento} value={complementoCliente} type='text' placeholder="Complemento" name='complemento' />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Form.Label>Tipo</Form.Label>
-                                        <Form.Control onChange={tipo} value={tipoCliente} as="select">
-                                            <option value="">Selecione</option>
-                                            <option value="comercial">Comercial</option>
-                                            <option value="residencial">Residencial</option>
-                                            <option value="rural">Rural</option>
-                                            <option value="casa de praia">Casa de praia</option>
-                                        </Form.Control>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Form.Group>
                 </Form>
                 
             </Modal.Body>

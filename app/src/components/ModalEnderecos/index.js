@@ -6,24 +6,59 @@ import { Edit, Delete,Add,Visibility } from '@material-ui/icons';
 import ModalGerenciaEndereco from '../ModalGerenciaEndereco'
 
 
-export default function ModalEnderecos({end, show, handleClose}) {
+export default function ModalEnderecos({end, show, id, handleClose}) {
         const [enderecos, setEnderecos] = useState([]);
-        const [modalGerenciaEnderecos, setModalGerenciaEnderecos] = useState([]);
+        const [endSelecionado, setEndSelecionado] = useState({});
+        const [indexSelecionado, setIndexSelecionado] = useState(0);
+
+        const [idCliente, setIdCliente] = useState(id);
+        const [token,setToken] = useState(localStorage.getItem('token'))
+
+        const [modalGerenciaEnderecos, setModalGerenciaEnderecos] = useState(false);
     const handleCloseModalGerenciaEnderecos = () => {
         setModalGerenciaEnderecos(false);
     }
     useEffect(() => {
-        setEnderecos(end)
-        console.log("enderecos",end)
-    }, [end]);
-    function editar(id) {
+        console.log("endereco aauii",end)
+        setIdCliente(id)
+        buscar(id);
+
+    }, [id]);
+
+    async function atualizar(data){
+        await api.put(`/clientes/enderecos/${idCliente}`,data,{
+            headers: { Authorization: token }
+        })
+    }
+    async function buscar(){
+        let response = await api.get(`/clientes/enderecos/${id}`,{
+            headers: { Authorization: token }
+        })
+        setEnderecos(response.data)
+
+    }
+    async function editar(end,index) {
         console.log("editar")
+        setEndSelecionado(end)
+        setIndexSelecionado(index)
+        setModalGerenciaEnderecos(true)
+    }
+    async function updateEnderecos(end) {
+        enderecos[indexSelecionado] = end;
+        atualizar(enderecos);
+        buscar();
+    }
+    const handleShow = () =>{
+        setEndSelecionado({})
+        setModalGerenciaEnderecos(true);
+    } 
 
+    function remover(index) {
+        enderecos.splice(index, 1);
+        atualizar(enderecos);
+        buscar();
     }
 
-    function remover(id) {
-        console.log("remover")
-    }
 
     function renderEnderecos(endereco, index) {
         return (
@@ -32,8 +67,8 @@ export default function ModalEnderecos({end, show, handleClose}) {
                     <Accordion.Toggle as={Button} variant="link" eventKey="0">
                         {endereco.rua}
                     </Accordion.Toggle>
-                    <Edit title="Editar cliente"  onClick={() => editar(endereco)} color="primary" />
-                    <Delete title="Remover cliente" onClick={() => remover(endereco)} color="secondary" />
+                    <Edit title="Editar cliente"  onClick={() => editar(endereco,index)} color="primary" />
+                    <Delete title="Remover cliente" onClick={() => remover(index)} color="secondary" />
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                 <Card.Body>
@@ -65,9 +100,13 @@ export default function ModalEnderecos({end, show, handleClose}) {
     }
     return (
         <div >
-        <ModalEnderecos
+        <ModalGerenciaEndereco
             show={modalGerenciaEnderecos}
             handleClose={handleCloseModalGerenciaEnderecos}
+            id={idCliente}
+            end={endSelecionado}
+            updateEnderecos={updateEnderecos}
+            atualizarEnderecos={buscar}
 
         />
         <Modal size="lg" show={show} onHide={handleClose}>
@@ -75,13 +114,13 @@ export default function ModalEnderecos({end, show, handleClose}) {
             <Modal.Title>Endereços do cliente</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Button style={style.btnAdd} variant="primary" >
+                <Button style={style.btnAdd} variant="primary" onClick={handleShow} >
                     <Add color="primary" /> Cadastrar novo endereço
                 </Button>
                 <Accordion defaultActiveKey="0">
            
-                    {
-                        enderecos.map(renderEnderecos)
+                    {enderecos.length > 0 &&
+                            enderecos.map(renderEnderecos)
                     }
 
                 </Accordion>
@@ -89,9 +128,6 @@ export default function ModalEnderecos({end, show, handleClose}) {
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Fechar
-                </Button>
-                <Button variant="primary" >
-                    Salvar
                 </Button>
             </Modal.Footer>
         </Modal>

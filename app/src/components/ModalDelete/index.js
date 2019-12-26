@@ -12,11 +12,7 @@ export default function ModalDelete({id, show, handleClose}) {
         headers: { Authorization: token }
     })
       handleClose()
-
-
   }
-
-
     return (
       <>
 
