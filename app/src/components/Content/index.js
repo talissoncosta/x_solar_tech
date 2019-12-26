@@ -2,19 +2,22 @@
 import React, { useEffect,useState } from 'react';
 import api from '../../services/api';
 import { Button,Table,Container,Col,Row  } from 'react-bootstrap';
-import { Edit, Delete,Add } from '@material-ui/icons';
+import { Edit, Delete,Add,Visibility } from '@material-ui/icons';
 import ModalDelete from '../ModalDelete'
 import ModalEditar from '../ModalEditar'
 import ModalNovo from '../ModalNovo'
+import ModalEnderecos from '../ModalEnderecos'
 
 export default function Content() {
     const [clientes, setClientes] = useState([]);
-    const [token,setToken] = useState("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvYW8iLCJpYXQiOjE1NzcwMzk3Mzd9.c_MLNVTLh-KZrpEBKLtsKlZhyeoiO9zRj4_1B-fnpwk");
+    const [token, setToken] = useState(localStorage.getItem('token'));
     const [idSelecionado, setIdSelecionado] = useState('');
+    const [enderecosCliente, setEnderecosCliente] = useState([]);
 
     const [modalConfirmDelete, setModalConfirmDelete] = useState(false);
     const [showModalEditar, setShowModalEditar] = useState(false);
     const [showModalNovo, setShowModalNovo] = useState(false);
+    const [showModalEnderecos, setShowModalEnderecos] = useState(false);
 
     const handleCloseModalDelete = () => {
         setModalConfirmDelete(false);
@@ -28,7 +31,10 @@ export default function Content() {
         setShowModalNovo(false);
         loadClientes();
     } 
-
+    const handleCloseModalEnderecos = () => {
+        setShowModalEnderecos(false);
+        loadClientes();
+    }
     const handleShow = () => setShowModalNovo(true);
 
     let loadClientes = async () => {
@@ -49,7 +55,12 @@ export default function Content() {
         setIdSelecionado(id)
         console.log(modalConfirmDelete)
     }
-
+    function enderecos(enderecos,id) {
+        console.log("END",enderecos,id)
+        setShowModalEnderecos(true)
+        setIdSelecionado(id)
+        setEnderecosCliente(enderecos);
+    }
     function renderCliente(cliente, index) {
         return (
           <tr key={index}>
@@ -59,24 +70,7 @@ export default function Content() {
             <td>{cliente.telefone}</td>
             <td>{cliente.email}</td>
             <td>
-                <Container style={style.endereco}>
-                    <Row>
-                        <Col xs={6}><b>Cidade:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].cidade:'')} </Col>
-                        <Col xs={6}><b>Estado: </b>{(cliente.enderecos.length > 0? cliente.enderecos[0].estado:'')} </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={6}><b>Bairro:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].bairro:'')} </Col>
-                        <Col xs={6}><b>CEP:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].cep:'')}</Col>
-                    </Row>
-                    <Row>
-                        <Col xs={6}><b>Rua:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].rua:'')}</Col>
-                        <Col xs={6}><b>Número:</b> {(cliente.enderecos.length > 0? cliente.enderecos[0].numero:'')}</Col>
-                    </Row>
-                    <Row>
-                        <Col xs={6}><b>Complemento:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].complemento:'')} </Col>
-                        <Col xs={6}><b>Tipo:</b>{(cliente.enderecos.length > 0? cliente.enderecos[0].tipo:'')} </Col>
-                    </Row>
-                </Container>
+                <Visibility title="Gerenciar endereços"  onClick={() => enderecos(cliente.enderecos,cliente._id)} color="primary" />
             
             </td>
 
@@ -94,7 +88,7 @@ export default function Content() {
         loadClientes();
     }, []);
     return (
-        <div>
+        <div >
             <Button style={style.btnAdd} variant="primary" onClick={handleShow}>
                 <Add color="primary" /> Cadastrar novo cliente
             </Button>
@@ -112,7 +106,14 @@ export default function Content() {
                 show={showModalNovo}
                 handleClose={handleCloseModalNovo}
             />
-            <Table style={style.table} striped condensed hover>
+            <ModalEnderecos
+                show={showModalEnderecos}
+                id={idSelecionado}
+                handleClose={handleCloseModalEnderecos}
+                end={enderecosCliente}
+
+            />
+            <Table  style={style.table} size="xl" responsive striped condensed hover>
                     <thead>
                         <tr>
                         <th></th>
@@ -120,8 +121,8 @@ export default function Content() {
                         <th>Cpf</th>
                         <th>Telefone</th>
                         <th>Email</th>
-                        <th>Endereço principal</th>
-                        <th>Acões</th>
+                        <th>Endereços</th>
+                        <th>Ações</th>
 
                         </tr>
                     </thead>
