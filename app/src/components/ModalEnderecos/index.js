@@ -1,7 +1,7 @@
 
 import React, { useEffect,useState } from 'react';
 import api from '../../services/api';
-import { Button,Container,Col,Row,Modal,Accordion,Card  } from 'react-bootstrap';
+import { Button,Container,Col,Row,Modal,Accordion,Card,Alert  } from 'react-bootstrap';
 import { Edit, Delete,Add } from '@material-ui/icons';
 import ModalGerenciaEndereco from '../ModalGerenciaEndereco'
 
@@ -95,6 +95,11 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                 <Card.Body>
+                {endereco.principal &&
+                    <Alert variant="primary">
+                        Endereço principal
+                    </Alert>
+                }
 
                     <Container style={style.endereco}>
                         <Row>
@@ -113,9 +118,7 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
                             <Col xs={6}><b>Complemento:</b>{endereco.complemento} </Col>
                             <Col xs={6}><b>Tipo:</b>{endereco.tipo} </Col>
                         </Row>
-                        <Row>
-                            <Col xs={6}><b>Endereco principal:</b> {(endereco.principal?'Sim':'Não')} </Col>
-                        </Row>
+
                     </Container>
 
                 </Card.Body>

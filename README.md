@@ -22,7 +22,7 @@ Para realizar o login utilize:
 + usuario: joao
 + senha: xsolartech
 
-O cadastro de multiplos endereços secundários ficou pendente.
+UPDATE: Adicionado suporte para multiplos endereços definindo um endereço principal
 
 Qualquer dúvida estou a disposição.
 
