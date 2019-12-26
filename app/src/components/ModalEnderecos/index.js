@@ -87,19 +87,34 @@ export default function ModalEnderecos({end, show, id, handleClose}) {
         return (
             <Card>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                        {endereco.rua}
-                    </Accordion.Toggle>
-                    <Edit title="Editar cliente"  onClick={() => editar(endereco,index)} color="primary" />
-                    <Delete title="Remover cliente" onClick={() => confirmaExclusao(index)} color="secondary" />
+
+                        <Row>
+                            <Col md={1}>
+                                <Accordion.Toggle as={Button} variant="link" eventKey={index}>
+                                    {endereco.rua}
+                                </Accordion.Toggle>
+                            </Col>
+                            <Col md={1}>
+                                <Edit  title="Editar cliente"  onClick={() => editar(endereco,index)} color="primary" />
+                            </Col>
+                            <Col md={1}>
+                                <Delete title="Remover cliente" onClick={() => confirmaExclusao(index)} color="secondary" />
+
+                            </Col>
+                            <Col >
+                                {endereco.principal &&
+                                <Alert variant="primary">
+                                    Endereço principal
+                                </Alert>
+                                }  
+                            </Col>
+                        </Row>
+ 
+
+
                 </Card.Header>
-                <Accordion.Collapse eventKey="0">
+                <Accordion.Collapse eventKey={index}>
                 <Card.Body>
-                {endereco.principal &&
-                    <Alert variant="primary">
-                        Endereço principal
-                    </Alert>
-                }
 
                     <Container style={style.endereco}>
                         <Row>
